@@ -7,8 +7,9 @@ rm -rf /home/ubuntu/.ros/log
 
 roscore &
 
-roslaunch rplidar_ros rplidar.launch --wait &
+screen -S lidar -dm bash -c "source /home/ubuntu/.ros_config; roslaunch rplidar_ros rplidar.launch --wait"
 
+screen -S can_driver -dm bash -c "sudo /home/ubuntu/pi_ws/start_can_node.sh"
 
 while true;
 do
