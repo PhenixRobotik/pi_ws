@@ -1,3 +1,6 @@
 [submodule "src/rplidar_ros"]
 	path = src/rplidar_ros
 	url = https://github.com/Slamtec/rplidar_ros.git
+[submodule "src/canard_driver/libcanard"]
+	path = src/canard_driver/libcanard
+	url = https://github.com/UAVCAN/libcanard.git
