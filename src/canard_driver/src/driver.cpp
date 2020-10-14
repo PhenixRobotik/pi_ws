@@ -4,12 +4,9 @@
 
 #include <sstream>
 
+#include "driver.h"
 #include "can.h"
-
-typedef struct{
-  int can_socket;
-  CanardInstance can_ins;
-} driver_data;
+#include "can2ros.h"
 
 void *RX_Thread_Func(void *vargp)
 {
@@ -23,12 +20,11 @@ void *RX_Thread_Func(void *vargp)
     if(result == 1)
     {
       //printf("port_id:%d remote_node_id:%d size:%d\n", transfer.port_id, transfer.remote_node_id, transfer.payload_size);
+      decode2ros(pdata, &transfer);
       pdata->can_ins.memory_free(&pdata->can_ins, (void*)transfer.payload);
     }
     else if(result < 0)
-    {
       ROS_ERROR("Canrd RX error!");
-    }
   }
   return NULL;
 }
@@ -42,18 +38,14 @@ int main(int argc, char **argv)
   data.can_socket = open_can_socket();
   data.can_ins = start_canard();
 
-  CanardRxSubscription my_service_subscription;
-  (void) canardRxSubscribe(&data.can_ins,
-                         CanardTransferKindMessage,
-                         1233,    // The Service-ID whose responses we will receive.
-                         1024,   // The extent (the maximum payload size); pick a huge value if not sure.
-                         CANARD_DEFAULT_TRANSFER_ID_TIMEOUT_USEC,
-                         &my_service_subscription);
-  pthread_t rx_thread_id;
-  pthread_create(&rx_thread_id, NULL, RX_Thread_Func, &data);
-
   ros::init(argc, argv, "canard_driver");
   ros::NodeHandle n;
+  data.pn = &n;
+  
+  init_subscription(&data);
+
+  pthread_t rx_thread_id;
+  pthread_create(&rx_thread_id, NULL, RX_Thread_Func, &data);
 
   ros::spin();
 
