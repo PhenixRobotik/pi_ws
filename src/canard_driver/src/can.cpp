@@ -107,3 +107,31 @@ int can_frame_to_canard_rx(CanardInstance *pins, struct can_frame *pframe, Canar
                                        ptransfer);
   return result;
 }
+
+
+int canard_transfer_to_can(driver_data *pdata, CanardTransfer *ptransfer_tx)
+{
+  int32_t result_tx = canardTxPush(&pdata->can_ins, ptransfer_tx);
+
+  for (const CanardFrame* txf = NULL; (txf = canardTxPeek(&pdata->can_ins)) != NULL;)  // Look at the top of the TX queue.
+  {
+    // Please ensure TX deadline not expired.
+    // Send the frame. Redundant interfaces may be used here.
+    struct can_frame frame_tx;
+    frame_tx.can_id = txf->extended_can_id | CAN_EFF_FLAG;// & ~CAN_RTR_FLAG & ~CAN_ERR_FLAG;
+
+
+    //printf("ID TX: 0x%08x 0x%08x 0x%08x\n", txf->extended_can_id, frame_tx.can_id, frame_tx.can_id & CAN_EFF_MASK);
+    frame_tx.can_dlc = txf->payload_size;
+    memcpy(frame_tx.data, txf->payload, txf->payload_size);
+
+    if (write(pdata->can_socket, &frame_tx, sizeof(struct can_frame)) != sizeof(struct can_frame))
+    {
+      perror("Write");
+    }
+                                 // If the driver is busy, break and retry later.
+    canardTxPop(&pdata->can_ins);                         // Remove the frame from the queue after it's transmitted.
+    pdata->can_ins.memory_free(&pdata->can_ins, (CanardFrame*)txf);  // Deallocate the dynamic memory afterwards.
+  }
+  return 1;
+}
