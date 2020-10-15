@@ -78,7 +78,7 @@ CanardInstance start_canard()
 {
   CanardInstance ins = canardInit(&memAllocate, &memFree);
   ins.mtu_bytes = CANARD_MTU_CAN_CLASSIC;  // Defaults to 64 (CAN FD); here we select Classic CAN.
-  ins.node_id   = RPI_CAN_NODE_IP;
+  ins.node_id   = CAN_ID_RPI;
 
   return ins;
 }

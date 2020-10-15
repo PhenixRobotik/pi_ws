@@ -6,8 +6,6 @@
 #include <linux/can/raw.h>
 
 #define CAN_IFACE "can0"
-#define CAN_SPEED 500000
-#define RPI_CAN_NODE_IP 43
 
 int start_can_iface();
 int open_can_socket();

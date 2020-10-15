@@ -14,7 +14,7 @@ void z_in_Callback(const std_msgs::String::ConstPtr& msg)
       .timestamp_usec = 0,      // Zero if transmission deadline is not limited.
       .priority       = CanardPriorityNominal,
       .transfer_kind  = CanardTransferKindMessage,
-      .port_id        = 1230,                       // This is the subject-ID.
+      .port_id        = Z_IN,                       // This is the subject-ID.
       .remote_node_id = CANARD_NODE_ID_UNSET,       // Messages cannot be unicast, so use UNSET.
       .transfer_id    = in_z_transfer_id,
       .payload_size   = msg->data.size(),
@@ -27,7 +27,7 @@ void z_in_Callback(const std_msgs::String::ConstPtr& msg)
 
 int decode2ros_z(driver_data *pdata, CanardTransfer *ptransfer)
 {
-  if(ptransfer->port_id == ID_DUMMY)
+  if(ptransfer->port_id == Z_OUT)
   {
     std_msgs::String msg;
 
@@ -47,7 +47,7 @@ void init_subscription_z(driver_data *pdata)
 {
   (void) canardRxSubscribe(&pdata->can_ins,
                          CanardTransferKindMessage,
-                         1233,    // The Service-ID whose responses we will receive.
+                         Z_OUT,    // The Service-ID whose responses we will receive.
                          1024,   // The extent (the maximum payload size); pick a huge value if not sure.
                          CANARD_DEFAULT_TRANSFER_ID_TIMEOUT_USEC,
                          &out_z_subscription);
