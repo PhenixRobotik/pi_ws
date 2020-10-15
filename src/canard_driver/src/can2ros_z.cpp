@@ -1,12 +1,22 @@
 #include "can2ros_z.h"
-#include "std_msgs/String.h"
 #include "can.h"
 
-static CanardRxSubscription out_z_subscription;//TODO put in data structure
+#include "std_msgs/String.h"
+#include "std_msgs/Bool.h"
+
+//TODO put in data structure
+static driver_data *pdata_ros_cb;
+
+static CanardRxSubscription out_z_subscription;
 static ros::Publisher out_pub;
 static ros::Subscriber in_sub;
-static driver_data *pdata_ros_cb;
 static uint8_t in_z_transfer_id;
+
+static CanardRxSubscription valve_status_z_subscription;
+static ros::Publisher valve_pub;
+static ros::Subscriber valve_sub;
+static uint8_t valve_z_transfer_id;
+
 
 void z_in_Callback(const std_msgs::String::ConstPtr& msg)
 {
@@ -25,6 +35,24 @@ void z_in_Callback(const std_msgs::String::ConstPtr& msg)
   int transfer_result = canard_transfer_to_can(pdata_ros_cb, &transfer_tx);
 }
 
+void valve_z_Callback(const std_msgs::Bool::ConstPtr& msg)
+{
+  CanardTransfer transfer_tx = {
+      .timestamp_usec = 0,      // Zero if transmission deadline is not limited.
+      .priority       = CanardPriorityNominal,
+      .transfer_kind  = CanardTransferKindMessage,
+      .port_id        = Z_PUMP_VALVE_SET,                       // This is the subject-ID.
+      .remote_node_id = CANARD_NODE_ID_UNSET,       // Messages cannot be unicast, so use UNSET.
+      .transfer_id    = valve_z_transfer_id,
+      .payload_size   = 1,
+      .payload        =  &msg->data,
+  };
+  ++valve_z_transfer_id;  // The transfer-ID shall be incremented after every transmission on this subject.
+
+  int transfer_result = canard_transfer_to_can(pdata_ros_cb, &transfer_tx);
+}
+
+
 int decode2ros_z(driver_data *pdata, CanardTransfer *ptransfer)
 {
   if(ptransfer->port_id == Z_OUT)
@@ -40,20 +68,41 @@ int decode2ros_z(driver_data *pdata, CanardTransfer *ptransfer)
     out_pub.publish(msg);
     return 1;
   }
+  else if(ptransfer->port_id == Z_PUMP_VALVE_STATUS)
+  {
+    std_msgs::Bool msg;
+    if(ptransfer->payload_size != 1)
+      return 0;
+    msg.data = ((unsigned char *)ptransfer->payload)[0];
+
+    valve_pub.publish(msg);
+    return 1;
+  }
+
   return 0;
 }
 
 void init_subscription_z(driver_data *pdata)
 {
+  pdata_ros_cb = pdata;
+
   (void) canardRxSubscribe(&pdata->can_ins,
                          CanardTransferKindMessage,
                          Z_OUT,    // The Service-ID whose responses we will receive.
                          1024,   // The extent (the maximum payload size); pick a huge value if not sure.
                          CANARD_DEFAULT_TRANSFER_ID_TIMEOUT_USEC,
                          &out_z_subscription);
-  out_pub = pdata->pn->advertise<std_msgs::String>("/z/z_out", 1000);
-
+  out_pub = pdata->pn->advertise<std_msgs::String>("/z/z_out", 2);
   in_z_transfer_id = 0;
-  pdata_ros_cb = pdata;
-  in_sub = pdata->pn->subscribe("/z/z_in", 1000, z_in_Callback);
+  in_sub = pdata->pn->subscribe("/z/z_in", 2, z_in_Callback);
+
+  (void) canardRxSubscribe(&pdata->can_ins,
+                         CanardTransferKindMessage,
+                         Z_PUMP_VALVE_STATUS,
+                         1,
+                         CANARD_DEFAULT_TRANSFER_ID_TIMEOUT_USEC,
+                         &valve_status_z_subscription);
+  valve_pub = pdata->pn->advertise<std_msgs::String>("/z/pump_valve/status", 2);
+  valve_z_transfer_id = 0;
+  valve_sub = pdata->pn->subscribe("/z/pump_valve/set", 2, valve_z_Callback);
 }
