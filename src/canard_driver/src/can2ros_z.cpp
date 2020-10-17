@@ -70,21 +70,20 @@ template<class RosType> class ROS2CAN : public ROS2CAN_interface {
                 .remote_node_id = CANARD_NODE_ID_UNSET,         // Messages cannot be unicast, so use UNSET.
                 .transfer_id    = m_transfer_id,
                 .payload_size   = 0,
-                .payload        = 0,
+                .payload        = nullptr,
             };
 
-            msg_to_can(msg, transfer_tx.payload_size, &transfer_tx.payload);
-            ++m_transfer_id;  // The transfer-ID shall be incremented after every transmission on this subject.
-
+            msg_to_can(msg, transfer_tx.payload_size, transfer_tx.payload);
             int transfer_result = canard_transfer_to_can(pdata_ros_cb, &transfer_tx);
+            ++m_transfer_id;  // The transfer-ID shall be incremented after every transmission on this subject.
         }
 
-        void msg_to_can(RosType const& msg, size_t& payload_size, const void* payload);
+        void msg_to_can(RosType const& msg, size_t& payload_size, const void*& payload);
         void can_to_msg(RosType& msg, size_t payload_size, const void* payload);
 };
 
 template<>
-void ROS2CAN<std_msgs::String>::msg_to_can(std_msgs::String const& msg, size_t& payload_size, const void* payload) {
+void ROS2CAN<std_msgs::String>::msg_to_can(std_msgs::String const& msg, size_t& payload_size, const void*& payload) {
     payload_size = msg.data.size();
     payload = msg.data.c_str();
 }
@@ -96,7 +95,7 @@ void ROS2CAN<std_msgs::String>::can_to_msg(std_msgs::String& msg, size_t payload
 
 
 template<>
-void ROS2CAN<std_msgs::Bool>::msg_to_can(std_msgs::Bool const& msg, size_t& payload_size, const void* payload) {
+void ROS2CAN<std_msgs::Bool>::msg_to_can(std_msgs::Bool const& msg, size_t& payload_size, const void*& payload) {
     payload_size = 1;
     payload = &msg.data;
 }
