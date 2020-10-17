@@ -11,34 +11,18 @@
 #include "driver.h"
 #include "can.h"
 
-/*****************************************************************************/
-// map declaration utils
-
-class CAN2ROS_interface {
-public:
-    virtual void initialize(driver_data*) = 0;
-    virtual int send_to_ros(size_t payload_size, const void *payload) = 0;
-};
-
-using CAN2ROS_map = std::map<CanardPortID, std::shared_ptr<CAN2ROS_interface>>;
+#include "can2ros_nodes.h"
 
 /*****************************************************************************/
 // Implementation template
 
 template<class RosType> class CAN2ROS : public CAN2ROS_interface {
 public:
-    CAN2ROS(
-        CAN2ROS_map &map_to_add_itself,
-        uint16_t can_id_get,
-        uint16_t can_id_set,
-        std::string topic_name
-    )
+    CAN2ROS(uint16_t can_id_get, uint16_t can_id_set, std::string topic_name)
     : m_can_id_get(can_id_get)
     , m_can_id_set(can_id_set)
     , m_topic_name(topic_name)
-    {
-        map_to_add_itself[can_id_get] = std::shared_ptr<CAN2ROS_interface>(this);
-    }
+    { }
 
     ~CAN2ROS() = default;
 

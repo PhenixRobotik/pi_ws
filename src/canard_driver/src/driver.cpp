@@ -32,8 +32,9 @@ void *RX_Thread_Func(void *vargp)
 
 int main(int argc, char **argv)
 {
-  if(!start_can_iface())
-    return 1;
+  if(!start_can_iface()) {
+    // return 1;
+  }
 
   driver_data data;
   data.can_socket = open_can_socket();
