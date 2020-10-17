@@ -1,10 +1,11 @@
-#include "ros/ros.h"
-#include "std_msgs/String.h"
-#include <pthread.h>
+#include "driver.h"
 
+#include <pthread.h>
 #include <sstream>
 
-#include "driver.h"
+#include "ros/ros.h"
+#include "std_msgs/String.h"
+
 #include "can.h"
 #include "can2ros.h"
 
@@ -24,7 +25,7 @@ void *RX_Thread_Func(void *vargp)
       pdata->can_ins.memory_free(&pdata->can_ins, (void*)transfer.payload);
     }
     else if(result < 0)
-      ROS_ERROR("Canrd RX error!");
+      ROS_ERROR("Canard RX error!");
   }
   return NULL;
 }
@@ -41,7 +42,7 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "canard_driver");
   ros::NodeHandle n;
   data.pn = &n;
-  
+
   init_subscription(&data);
 
   pthread_t rx_thread_id;
