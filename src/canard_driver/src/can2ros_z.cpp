@@ -62,10 +62,6 @@ template<class RosType> class ROS2CAN : public ROS2CAN_interface {
         const std::string m_topic_name;
 
         void send_to_can(RosType msg) {
-            size_t payload_size = 0;
-            void* payload;
-            msg_to_can(msg, payload_size, payload);
-
             CanardTransfer transfer_tx = {
                 .timestamp_usec = 0,                            // Zero if transmission deadline is not limited.
                 .priority       = CanardPriorityNominal,
@@ -73,9 +69,11 @@ template<class RosType> class ROS2CAN : public ROS2CAN_interface {
                 .port_id        = m_can_id_set,                 // This is the subject-ID.
                 .remote_node_id = CANARD_NODE_ID_UNSET,         // Messages cannot be unicast, so use UNSET.
                 .transfer_id    = m_transfer_id,
-                .payload_size   = payload_size,
-                .payload        = payload,
+                .payload_size   = 0,
+                .payload        = 0,
             };
+
+            msg_to_can(msg, transfer_tx.payload_size, &transfer_tx.payload);
             ++m_transfer_id;  // The transfer-ID shall be incremented after every transmission on this subject.
 
             int transfer_result = canard_transfer_to_can(pdata_ros_cb, &transfer_tx);
@@ -110,9 +108,9 @@ void ROS2CAN<std_msgs::Bool>::can_to_msg(std_msgs::Bool& msg, size_t payload_siz
 
 std::map<CanardPortID, std::shared_ptr<ROS2CAN_interface>> can2ros_z;
 
-ROS2CAN<std_msgs::String>   z_text  (can2ros_z, Z_TEXT_GET,    Z_TEXT_SET, "/z/text");
-ROS2CAN<std_msgs::Bool>     z_pump  (can2ros_z, Z_PUMP_GET,    Z_PUMP_SET, "/z/pump");
-ROS2CAN<std_msgs::Bool>     z_valve (can2ros_z, Z_VALVE_GET,   Z_VALVE_SET,"/z/valve");
+auto z_valve= new ROS2CAN<std_msgs::Bool>    (can2ros_z, Z_VALVE_GET,   Z_VALVE_SET,"/z/valve");
+auto z_text = new ROS2CAN<std_msgs::String>  (can2ros_z, Z_TEXT_GET,    Z_TEXT_SET, "/z/text");
+auto z_pump = new ROS2CAN<std_msgs::Bool>    (can2ros_z, Z_PUMP_GET,    Z_PUMP_SET, "/z/pump");
 
 int decode2ros_z(driver_data *pdata, CanardTransfer *ptransfer) {
     auto it = can2ros_z.find(ptransfer->port_id);
