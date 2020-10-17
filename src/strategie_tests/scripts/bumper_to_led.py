@@ -21,8 +21,7 @@ def onBumper(data):
     if byte & 4: rgb.b = 255
     if byte & 8: rgb.r = 255 ; rgb.g = 255 ; rgb.b = 255
 
-    if rgb.r + rgb.g + rgb.b > 0:
-        rgbPub.publish(rgb)
+    rgbPub.publish(rgb)
 
 rospy.Subscriber('/hat/bumpers', Byte, onBumper)
 
