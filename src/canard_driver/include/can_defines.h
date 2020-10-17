@@ -3,10 +3,10 @@
 #define CAN_SPEED 500000
 
 enum CAN_ID {
-    CAN_ID_RPI  = 43,
-    CAN_ID_TSMR = 44,
-    CAN_ID_UPS  = 45,
-    CAN_ID_Z    = 46,
+    CAN_ID_RPI  = 3,
+    CAN_ID_TSMR = 4,
+    CAN_ID_UPS  = 5,
+    CAN_ID_Z    = 6,
 };
 
 enum MessageType {
