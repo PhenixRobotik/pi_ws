@@ -89,7 +89,7 @@ void ROS2CAN<std_msgs::String>::msg_to_can(std_msgs::String const& msg, size_t& 
 }
 template<>
 void ROS2CAN<std_msgs::String>::can_to_msg(std_msgs::String& msg, size_t payload_size, const void* payload) {
-    std::string decoded((char *)payload);
+    std::string decoded((char *)payload, payload_size);
     msg.data = decoded;
 }
 
