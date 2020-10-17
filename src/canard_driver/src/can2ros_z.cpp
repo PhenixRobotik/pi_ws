@@ -41,7 +41,7 @@ void valve_z_Callback(const std_msgs::Bool::ConstPtr& msg)
       .timestamp_usec = 0,      // Zero if transmission deadline is not limited.
       .priority       = CanardPriorityNominal,
       .transfer_kind  = CanardTransferKindMessage,
-      .port_id        = Z_PUMP_VALVE_SET,                       // This is the subject-ID.
+      .port_id        = Z_PUMP_SET,                       // This is the subject-ID.
       .remote_node_id = CANARD_NODE_ID_UNSET,       // Messages cannot be unicast, so use UNSET.
       .transfer_id    = valve_z_transfer_id,
       .payload_size   = 1,
@@ -68,7 +68,7 @@ int decode2ros_z(driver_data *pdata, CanardTransfer *ptransfer)
     out_pub.publish(msg);
     return 1;
   }
-  else if(ptransfer->port_id == Z_PUMP_VALVE_STATUS)
+  else if(ptransfer->port_id == Z_PUMP_GET)
   {
     std_msgs::Bool msg;
     if(ptransfer->payload_size != 1)
@@ -98,7 +98,7 @@ void init_subscription_z(driver_data *pdata)
 
   (void) canardRxSubscribe(&pdata->can_ins,
                          CanardTransferKindMessage,
-                         Z_PUMP_VALVE_STATUS,
+                         Z_PUMP_GET,
                          1,
                          CANARD_DEFAULT_TRANSFER_ID_TIMEOUT_USEC,
                          &valve_status_z_subscription);
