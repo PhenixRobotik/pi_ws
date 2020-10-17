@@ -10,12 +10,12 @@ enum CAN_ID {
 };
 
 enum MessageType {
-    Z_IN        = (CAN_ID_Z << 8) +   1,
-    Z_OUT       = (CAN_ID_Z << 8) +   2,
+    Z_TEXT_GET  = (CAN_ID_Z << 8) +   1,
+    Z_TEXT_SET  = (CAN_ID_Z << 8) +   2,
     Z_PUMP_GET  = (CAN_ID_Z << 8) +   3,
     Z_PUMP_SET  = (CAN_ID_Z << 8) +   4,
-    Z_VALVE_SET = (CAN_ID_Z << 8) +   5,
-    Z_VALVE_GET = (CAN_ID_Z << 8) +   6,
+    Z_VALVE_GET = (CAN_ID_Z << 8) +   5,
+    Z_VALVE_SET = (CAN_ID_Z << 8) +   6,
     Z_ZPOS_GET  = (CAN_ID_Z << 8) +   7,
     Z_ZPOS_SET  = (CAN_ID_Z << 8) +   8,
     Z_ANGLE_GET = (CAN_ID_Z << 8) +   9,
