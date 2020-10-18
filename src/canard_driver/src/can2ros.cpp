@@ -2,8 +2,7 @@
 
 #include "can2ros_z.h"
 
-void init_subscription(driver_data *pdata)
-{
+void init_subscription(driver_data *pdata) {
   init_subscription_z(pdata);
 }
 
