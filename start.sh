@@ -7,6 +7,7 @@ rm -rf /home/ubuntu/.ros/log
 sudo pigpiod
 roscore &
 
+screen -S tf -dm bash -c  "source /home/ubuntu/.ros_config; /home/ubuntu/pi_ws/frames.sh"
 screen -S lidar -dm bash -c "source /home/ubuntu/.ros_config; roslaunch rplidar_ros rplidar.launch --wait"
 
 screen -S hat -dm bash -c "source /home/ubuntu/.ros_config; rosrun hat_driver hat_driver.py"
