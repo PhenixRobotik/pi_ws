@@ -7,6 +7,8 @@
 
 #include <std_msgs/String.h>
 #include <std_msgs/Bool.h>
+#include <std_msgs/Int32.h>
+#include <std_msgs/Int16.h>
 
 #include "driver.h"
 #include "can.h"
@@ -120,4 +122,26 @@ void CAN2ROS<std_msgs::Bool>::msg_to_can(std_msgs::Bool const& msg, size_t& payl
 template<>
 void CAN2ROS<std_msgs::Bool>::can_to_msg(std_msgs::Bool& msg, size_t payload_size, const void* payload) {
     msg.data = ((unsigned char *)payload)[0];
+}
+
+//assuming same endian, which is the case between stm32 and pi
+template<>
+void CAN2ROS<std_msgs::Int32>::msg_to_can(std_msgs::Int32 const& msg, size_t& payload_size, const void*& payload) {
+    payload_size = 4;
+    payload = &msg.data;
+}
+template<>
+void CAN2ROS<std_msgs::Int32>::can_to_msg(std_msgs::Int32& msg, size_t payload_size, const void* payload) {
+    msg.data = ((int *)payload)[0];
+}
+
+//assuming same endian, which is the case between stm32 and pi
+template<>
+void CAN2ROS<std_msgs::Int16>::msg_to_can(std_msgs::Int16 const& msg, size_t& payload_size, const void*& payload) {
+    payload_size = 2;
+    payload = &msg.data;
+}
+template<>
+void CAN2ROS<std_msgs::Int16>::can_to_msg(std_msgs::Int16& msg, size_t payload_size, const void* payload) {
+    msg.data = ((short *)payload)[0];
 }
