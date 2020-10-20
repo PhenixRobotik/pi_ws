@@ -8,7 +8,7 @@ driver_data *pdata_ros_cb;
 auto z_text = new CAN2ROS<std_msgs::String>  (can2ros_z, Z_TEXT_GET,    Z_TEXT_SET, "/z/text");
 auto z_pump = new CAN2ROS<std_msgs::Bool>    (can2ros_z, Z_PUMP_GET,    Z_PUMP_SET, "/z/pump");
 auto z_valve= new CAN2ROS<std_msgs::Bool>    (can2ros_z, Z_VALVE_GET,   Z_VALVE_SET,"/z/valve");
-auto z_zpos = new CAN2ROS<std_msgs::Bool>    (can2ros_z, Z_ZPOS_GET,    Z_ZPOS_SET, "/z/position");
+auto z_zpos = new CAN2ROS<std_msgs::Int32>   (can2ros_z, Z_ZPOS_GET,    Z_ZPOS_SET, "/z/position");
 auto z_angle= new CAN2ROS<std_msgs::Int16>   (can2ros_z, Z_ANGLE_GET,   Z_ANGLE_SET,"/z/angle");
 auto flaggy = new CAN2ROS<std_msgs::Bool>    (can2ros_z, FLAGGY_GET,    FLAGGY_SET, "/flaggy");
 auto arm    = new CAN2ROS<std_msgs::Int16>   (can2ros_z, ARM_GET,       ARM_SET,    "/arm");
