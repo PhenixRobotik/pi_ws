@@ -13,6 +13,7 @@ auto z_angle= new CAN2ROS<std_msgs::Int16>   (can2ros_z, Z_ANGLE_GET,   Z_ANGLE_
 auto flaggy = new CAN2ROS<std_msgs::Bool>    (can2ros_z, FLAGGY_GET,    FLAGGY_SET, "/flaggy");
 auto arm    = new CAN2ROS<std_msgs::Int16>   (can2ros_z, ARM_GET,       ARM_SET,    "/arm");
 auto psensor= new CAN2ROS<std_msgs::Int32>   (can2ros_z, Z_PRESS_GET,   Z_PRESS_SET,"/z/pressure");
+auto color_sensor= new CAN2ROS<std_msgs::ColorRGBA> (can2ros_z, Z_COLOR_GET,   Z_COLOR_SET,"/z/color");
 
 void init_subscription_z(driver_data *pdata){
     pdata_ros_cb = pdata;

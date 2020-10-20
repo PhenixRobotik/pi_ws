@@ -9,6 +9,7 @@
 #include <std_msgs/Bool.h>
 #include <std_msgs/Int32.h>
 #include <std_msgs/Int16.h>
+#include <std_msgs/ColorRGBA.h>
 
 #include "driver.h"
 #include "can.h"
@@ -144,4 +145,16 @@ void CAN2ROS<std_msgs::Int16>::msg_to_can(std_msgs::Int16 const& msg, size_t& pa
 template<>
 void CAN2ROS<std_msgs::Int16>::can_to_msg(std_msgs::Int16& msg, size_t payload_size, const void* payload) {
     msg.data = ((short *)payload)[0];
+}
+
+
+template<>
+void CAN2ROS<std_msgs::ColorRGBA>::msg_to_can(std_msgs::ColorRGBA const& msg, size_t& payload_size, const void*& payload) {
+    payload_size = 0;//TODO
+}
+template<>
+void CAN2ROS<std_msgs::ColorRGBA>::can_to_msg(std_msgs::ColorRGBA& msg, size_t payload_size, const void* payload) {
+    msg.r = ((unsigned char *)payload)[0];
+    msg.g = ((unsigned char *)payload)[1];
+    msg.b = ((unsigned char *)payload)[2];
 }
