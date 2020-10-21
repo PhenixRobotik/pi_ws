@@ -12,6 +12,12 @@ enum CAN_ID {
 enum MessageType {
     TSMR_TEXT_GET  = (CAN_ID_TSMR << 8) +   1,
     TSMR_TEXT_SET  = (CAN_ID_TSMR << 8) +   2,
+    TSMR_ENCL_GET  = (CAN_ID_TSMR << 8) +   3,
+    TSMR_ENCL_SET  = (CAN_ID_TSMR << 8) +   4,
+    TSMR_ENCR_GET  = (CAN_ID_TSMR << 8) +   5,
+    TSMR_ENCR_SET  = (CAN_ID_TSMR << 8) +   6,
+    TSMR_ODOM_GET  = (CAN_ID_TSMR << 8) +   7,
+    TSMR_ODOM_SET  = (CAN_ID_TSMR << 8) +   8,
 
     Z_TEXT_GET  = (CAN_ID_Z << 8) +   1,
     Z_TEXT_SET  = (CAN_ID_Z << 8) +   2,

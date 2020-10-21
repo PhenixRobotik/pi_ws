@@ -11,6 +11,9 @@
 #include <std_msgs/Int16.h>
 #include <std_msgs/ColorRGBA.h>
 
+#include <nav_msgs/Odometry.h>
+#include <tf2/LinearMath/Quaternion.h>
+
 #include "driver.h"
 #include "can.h"
 
@@ -157,4 +160,22 @@ inline void CAN2ROS<std_msgs::ColorRGBA>::can_to_msg(std_msgs::ColorRGBA& msg, s
     msg.r = ((unsigned char *)payload)[0];
     msg.g = ((unsigned char *)payload)[1];
     msg.b = ((unsigned char *)payload)[2];
+}
+
+template<>
+inline void CAN2ROS<nav_msgs::Odometry>::msg_to_can(nav_msgs::Odometry const& msg, size_t& payload_size, const void*& payload) {
+    payload_size = 0;//TODO
+}
+template<>
+inline void CAN2ROS<nav_msgs::Odometry>::can_to_msg(nav_msgs::Odometry& msg, size_t payload_size, const void* payload) {
+    msg.pose.pose.position.x = ((double*)payload)[0];
+    msg.pose.pose.position.y = ((double*)payload)[1];
+    msg.pose.pose.position.z = 0;
+
+    tf2::Quaternion quat;
+    quat.setRPY( 0, 0, ((double*)payload)[2]);
+    msg.pose.pose.orientation.x = quat[0];
+    msg.pose.pose.orientation.y = quat[1];
+    msg.pose.pose.orientation.z = quat[2];
+    msg.pose.pose.orientation.w = quat[3];
 }
