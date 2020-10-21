@@ -10,6 +10,9 @@ enum CAN_ID {
 };
 
 enum MessageType {
+    TSMR_TEXT_GET  = (CAN_ID_TSMR << 8) +   1,
+    TSMR_TEXT_SET  = (CAN_ID_TSMR << 8) +   2,
+
     Z_TEXT_GET  = (CAN_ID_Z << 8) +   1,
     Z_TEXT_SET  = (CAN_ID_Z << 8) +   2,
     Z_PUMP_GET  = (CAN_ID_Z << 8) +   3,

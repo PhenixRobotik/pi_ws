@@ -104,56 +104,56 @@ private:
 
 
 template<>
-void CAN2ROS<std_msgs::String>::msg_to_can(std_msgs::String const& msg, size_t& payload_size, const void*& payload) {
+inline void CAN2ROS<std_msgs::String>::msg_to_can(std_msgs::String const& msg, size_t& payload_size, const void*& payload) {
     payload_size = msg.data.size();
     payload = msg.data.c_str();
 }
 template<>
-void CAN2ROS<std_msgs::String>::can_to_msg(std_msgs::String& msg, size_t payload_size, const void* payload) {
+inline void CAN2ROS<std_msgs::String>::can_to_msg(std_msgs::String& msg, size_t payload_size, const void* payload) {
     std::string decoded((char *)payload, payload_size);
     msg.data = decoded;
 }
 
 
 template<>
-void CAN2ROS<std_msgs::Bool>::msg_to_can(std_msgs::Bool const& msg, size_t& payload_size, const void*& payload) {
+inline void CAN2ROS<std_msgs::Bool>::msg_to_can(std_msgs::Bool const& msg, size_t& payload_size, const void*& payload) {
     payload_size = 1;
     payload = &msg.data;
 }
 template<>
-void CAN2ROS<std_msgs::Bool>::can_to_msg(std_msgs::Bool& msg, size_t payload_size, const void* payload) {
+inline void CAN2ROS<std_msgs::Bool>::can_to_msg(std_msgs::Bool& msg, size_t payload_size, const void* payload) {
     msg.data = ((unsigned char *)payload)[0];
 }
 
 //assuming same endian, which is the case between stm32 and pi
 template<>
-void CAN2ROS<std_msgs::Int32>::msg_to_can(std_msgs::Int32 const& msg, size_t& payload_size, const void*& payload) {
+inline void CAN2ROS<std_msgs::Int32>::msg_to_can(std_msgs::Int32 const& msg, size_t& payload_size, const void*& payload) {
     payload_size = 4;
     payload = &msg.data;
 }
 template<>
-void CAN2ROS<std_msgs::Int32>::can_to_msg(std_msgs::Int32& msg, size_t payload_size, const void* payload) {
+inline void CAN2ROS<std_msgs::Int32>::can_to_msg(std_msgs::Int32& msg, size_t payload_size, const void* payload) {
     msg.data = ((int *)payload)[0];
 }
 
 //assuming same endian, which is the case between stm32 and pi
 template<>
-void CAN2ROS<std_msgs::Int16>::msg_to_can(std_msgs::Int16 const& msg, size_t& payload_size, const void*& payload) {
+inline void CAN2ROS<std_msgs::Int16>::msg_to_can(std_msgs::Int16 const& msg, size_t& payload_size, const void*& payload) {
     payload_size = 2;
     payload = &msg.data;
 }
 template<>
-void CAN2ROS<std_msgs::Int16>::can_to_msg(std_msgs::Int16& msg, size_t payload_size, const void* payload) {
+inline void CAN2ROS<std_msgs::Int16>::can_to_msg(std_msgs::Int16& msg, size_t payload_size, const void* payload) {
     msg.data = ((short *)payload)[0];
 }
 
 
 template<>
-void CAN2ROS<std_msgs::ColorRGBA>::msg_to_can(std_msgs::ColorRGBA const& msg, size_t& payload_size, const void*& payload) {
+inline void CAN2ROS<std_msgs::ColorRGBA>::msg_to_can(std_msgs::ColorRGBA const& msg, size_t& payload_size, const void*& payload) {
     payload_size = 0;//TODO
 }
 template<>
-void CAN2ROS<std_msgs::ColorRGBA>::can_to_msg(std_msgs::ColorRGBA& msg, size_t payload_size, const void* payload) {
+inline void CAN2ROS<std_msgs::ColorRGBA>::can_to_msg(std_msgs::ColorRGBA& msg, size_t payload_size, const void* payload) {
     msg.r = ((unsigned char *)payload)[0];
     msg.g = ((unsigned char *)payload)[1];
     msg.b = ((unsigned char *)payload)[2];

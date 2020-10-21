@@ -18,6 +18,6 @@ catkin_package()
 
 include_directories(include libcanard/libcanard ${catkin_INCLUDE_DIRS})
 
-add_executable(driver src/driver.cpp src/can.cpp src/can2ros.cpp src/can2ros_z.cpp libcanard/libcanard/canard.c)
+add_executable(driver src/driver.cpp src/can.cpp src/can2ros.cpp src/can2ros_z.cpp src/can2ros_tsmr.cpp libcanard/libcanard/canard.c)
 target_link_libraries(driver ${catkin_LIBRARIES} socketcan)
 add_dependencies(driver canard_driver_generate_messages_cpp)

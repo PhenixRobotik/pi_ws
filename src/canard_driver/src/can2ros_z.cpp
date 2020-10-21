@@ -3,7 +3,7 @@
 
 std::map<CanardPortID, std::shared_ptr<CAN2ROS_interface>> can2ros_z;
 
-driver_data *pdata_ros_cb;
+static driver_data *pdata_ros_cb;
 
 auto z_text = new CAN2ROS<std_msgs::String>  (can2ros_z, Z_TEXT_GET,    Z_TEXT_SET, "/z/text");
 auto z_pump = new CAN2ROS<std_msgs::Bool>    (can2ros_z, Z_PUMP_GET,    Z_PUMP_SET, "/z/pump");
