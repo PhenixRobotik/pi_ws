@@ -196,4 +196,11 @@ inline void CAN2ROS<nav_msgs::Odometry>::can_to_msg(nav_msgs::Odometry& msg, siz
     msg.pose.pose.orientation.y = quat[1];
     msg.pose.pose.orientation.z = quat[2];
     msg.pose.pose.orientation.w = quat[3];
+
+    msg.twist.twist.linear.x = ((float*)payload)[3];
+    msg.twist.twist.linear.y = 0;
+    msg.twist.twist.linear.z = 0;
+    msg.twist.twist.angular.x = 0;
+    msg.twist.twist.angular.y = 0;
+    msg.twist.twist.angular.z = ((float*)payload)[4];
 }
