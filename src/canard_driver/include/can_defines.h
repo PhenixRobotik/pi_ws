@@ -18,6 +18,8 @@ enum MessageType {
     TSMR_ENCR_SET  = (CAN_ID_TSMR << 8) +   6,
     TSMR_ODOM_GET  = (CAN_ID_TSMR << 8) +   7,
     TSMR_ODOM_SET  = (CAN_ID_TSMR << 8) +   8,
+    TSMR_POWER_GET = (CAN_ID_TSMR << 8) +   9,
+    TSMR_POWER_SET = (CAN_ID_TSMR << 8) +   10,
 
     Z_TEXT_GET  = (CAN_ID_Z << 8) +   1,
     Z_TEXT_SET  = (CAN_ID_Z << 8) +   2,

@@ -13,6 +13,9 @@
 
 #include <nav_msgs/Odometry.h>
 #include <tf2/LinearMath/Quaternion.h>
+#include <tf/tf.h>
+#include <tf/transform_datatypes.h>
+//#include <tf/LinearMath/btMatrix3x3.h>
 
 #include "driver.h"
 #include "can.h"
@@ -162,18 +165,33 @@ inline void CAN2ROS<std_msgs::ColorRGBA>::can_to_msg(std_msgs::ColorRGBA& msg, s
     msg.b = ((unsigned char *)payload)[2];
 }
 
+static float payload_buff_float[127];
 template<>
 inline void CAN2ROS<nav_msgs::Odometry>::msg_to_can(nav_msgs::Odometry const& msg, size_t& payload_size, const void*& payload) {
-    payload_size = 0;//TODO
+    payload_size = 12;
+    payload_buff_float[0] = msg.pose.pose.position.x;
+    payload_buff_float[1] = msg.pose.pose.position.y;
+
+    tf::Quaternion q(
+       msg.pose.pose.orientation.x,
+       msg.pose.pose.orientation.y,
+       msg.pose.pose.orientation.z,
+       msg.pose.pose.orientation.w);
+    tf::Matrix3x3 m(q);
+    double roll, pitch, yaw;
+    m.getRPY(roll, pitch, yaw);
+
+    payload_buff_float[2] = yaw;
+    payload = payload_buff_float;
 }
 template<>
 inline void CAN2ROS<nav_msgs::Odometry>::can_to_msg(nav_msgs::Odometry& msg, size_t payload_size, const void* payload) {
-    msg.pose.pose.position.x = ((double*)payload)[0];
-    msg.pose.pose.position.y = ((double*)payload)[1];
+    msg.pose.pose.position.x = ((float*)payload)[0];
+    msg.pose.pose.position.y = ((float*)payload)[1];
     msg.pose.pose.position.z = 0;
 
     tf2::Quaternion quat;
-    quat.setRPY( 0, 0, ((double*)payload)[2]);
+    quat.setRPY( 0, 0, ((float*)payload)[2]);
     msg.pose.pose.orientation.x = quat[0];
     msg.pose.pose.orientation.y = quat[1];
     msg.pose.pose.orientation.z = quat[2];
