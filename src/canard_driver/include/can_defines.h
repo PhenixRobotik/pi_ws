@@ -20,6 +20,16 @@ enum MessageType {
     TSMR_ODOM_SET  = (CAN_ID_TSMR << 8) +   8,
     TSMR_POWER_GET = (CAN_ID_TSMR << 8) +   9,
     TSMR_POWER_SET = (CAN_ID_TSMR << 8) +   10,
+    //translation distance and speed
+    TSMR_T_GET     = (CAN_ID_TSMR << 8) +   11,
+    TSMR_T_SET     = (CAN_ID_TSMR << 8) +   12,
+    TSMR_TS_GET    = (CAN_ID_TSMR << 8) +   13,
+    TSMR_TS_SET    = (CAN_ID_TSMR << 8) +   14,
+    //rotation distance and speed
+    TSMR_R_GET     = (CAN_ID_TSMR << 8) +   15,
+    TSMR_R_SET     = (CAN_ID_TSMR << 8) +   16,
+    TSMR_RS_GET    = (CAN_ID_TSMR << 8) +   17,
+    TSMR_RS_SET    = (CAN_ID_TSMR << 8) +   18,
 
     Z_TEXT_GET  = (CAN_ID_Z << 8) +   1,
     Z_TEXT_SET  = (CAN_ID_Z << 8) +   2,

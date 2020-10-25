@@ -9,6 +9,7 @@
 #include <std_msgs/Bool.h>
 #include <std_msgs/Int32.h>
 #include <std_msgs/Int16.h>
+#include <std_msgs/Float32.h>
 #include <std_msgs/ColorRGBA.h>
 
 #include <nav_msgs/Odometry.h>
@@ -151,6 +152,17 @@ inline void CAN2ROS<std_msgs::Int16>::msg_to_can(std_msgs::Int16 const& msg, siz
 template<>
 inline void CAN2ROS<std_msgs::Int16>::can_to_msg(std_msgs::Int16& msg, size_t payload_size, const void* payload) {
     msg.data = ((short *)payload)[0];
+}
+
+//assuming same endian, which is the case between stm32 and pi
+template<>
+inline void CAN2ROS<std_msgs::Float32>::msg_to_can(std_msgs::Float32 const& msg, size_t& payload_size, const void*& payload) {
+    payload_size = 4;
+    payload = &msg.data;
+}
+template<>
+inline void CAN2ROS<std_msgs::Float32>::can_to_msg(std_msgs::Float32& msg, size_t payload_size, const void* payload) {
+    msg.data = ((float *)payload)[0];
 }
 
 
