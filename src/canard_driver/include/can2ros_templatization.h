@@ -12,7 +12,10 @@
 #include <std_msgs/Float32.h>
 #include <std_msgs/ColorRGBA.h>
 
+#include <geometry_msgs/Pose2D.h>
+
 #include <nav_msgs/Odometry.h>
+
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf/tf.h>
 #include <tf/transform_datatypes.h>
@@ -215,4 +218,19 @@ inline void CAN2ROS<nav_msgs::Odometry>::can_to_msg(nav_msgs::Odometry& msg, siz
     msg.twist.twist.angular.x = 0;
     msg.twist.twist.angular.y = 0;
     msg.twist.twist.angular.z = ((float*)payload)[4];
+}
+
+template<>
+inline void CAN2ROS<geometry_msgs::Pose2D>::msg_to_can(geometry_msgs::Pose2D const& msg, size_t& payload_size, const void*& payload) {
+  payload_size = 12;
+  payload_buff_float[0] = msg.x;
+  payload_buff_float[1] = msg.y;
+  payload_buff_float[2] = msg.theta;
+  payload = payload_buff_float;
+}
+template<>
+inline void CAN2ROS<geometry_msgs::Pose2D>::can_to_msg(geometry_msgs::Pose2D& msg, size_t payload_size, const void* payload) {
+  msg.x = ((float *)payload)[0];
+  msg.y = ((float *)payload)[1];
+  msg.theta = ((float *)payload)[2];
 }

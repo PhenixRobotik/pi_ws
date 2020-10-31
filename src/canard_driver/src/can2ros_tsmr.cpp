@@ -14,6 +14,8 @@ auto translation = new CAN2ROS<std_msgs::Float32>   (can2ros_tsmr, TSMR_T_GET,  
 auto translation_speed = new CAN2ROS<std_msgs::Float32>   (can2ros_tsmr, TSMR_TS_GET, TSMR_TS_SET, "/tsmr/translation_speed");
 auto rotation = new CAN2ROS<std_msgs::Float32>   (can2ros_tsmr, TSMR_R_GET,    TSMR_R_SET, "/tsmr/rotation");
 auto rotation_speed = new CAN2ROS<std_msgs::Float32>   (can2ros_tsmr, TSMR_RS_GET, TSMR_RS_SET, "/tsmr/rotation_speed");
+auto xyt         = new CAN2ROS<geometry_msgs::Pose2D>(can2ros_tsmr, TSMR_XYT_GET, TSMR_XYT_SET, "/tsmr/xyt");
+auto xyt_back    = new CAN2ROS<geometry_msgs::Pose2D>(can2ros_tsmr, TSMR_XYT_BACK_GET, TSMR_XYT_BACK_SET, "/tsmr/xyt_back");
 
 void init_subscription_tsmr(driver_data *pdata){
     pdata_ros_cb = pdata;
