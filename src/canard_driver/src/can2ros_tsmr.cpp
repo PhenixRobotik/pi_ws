@@ -18,6 +18,8 @@ auto xyt         = new CAN2ROS<geometry_msgs::Pose2D>(can2ros_tsmr, TSMR_XYT_GET
 auto xyt_back    = new CAN2ROS<geometry_msgs::Pose2D>(can2ros_tsmr, TSMR_XYT_BACK_GET, TSMR_XYT_BACK_SET, "/tsmr/xyt_back");
 auto pid_sigma   = new CAN2ROS<canard_driver::PID>(can2ros_tsmr, TSMR_PID_SIGMA_GET, TSMR_PID_SIGMA_SET, "/tsmr/pid_sigma");
 auto pid_delta   = new CAN2ROS<canard_driver::PID>(can2ros_tsmr, TSMR_PID_DELTA_GET, TSMR_PID_DELTA_SET, "/tsmr/pid_delta");
+auto pid_sigma_t = new CAN2ROS<canard_driver::PID_tolerances>(can2ros_tsmr, TSMR_PID_SIGMA_T_GET, TSMR_PID_SIGMA_T_SET, "/tsmr/pid_sigma_tolerances");
+auto pid_delta_t = new CAN2ROS<canard_driver::PID_tolerances>(can2ros_tsmr, TSMR_PID_DELTA_T_GET, TSMR_PID_DELTA_T_SET, "/tsmr/pid_delta_tolerances");
 
 void init_subscription_tsmr(driver_data *pdata){
     pdata_ros_cb = pdata;

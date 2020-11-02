@@ -17,6 +17,7 @@
 #include <nav_msgs/Odometry.h>
 
 #include <canard_driver/PID.h>
+#include <canard_driver/PID_tolerances.h>
 
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf/tf.h>
@@ -250,4 +251,19 @@ inline void CAN2ROS<canard_driver::PID>::can_to_msg(canard_driver::PID& msg, siz
   msg.Kp = ((float *)payload)[0];
   msg.Ki = ((float *)payload)[1];
   msg.Kd = ((float *)payload)[2];
+}
+
+template<>
+inline void CAN2ROS<canard_driver::PID_tolerances>::msg_to_can(canard_driver::PID_tolerances const& msg, size_t& payload_size, const void*& payload) {
+  payload_size = 12;
+  payload_buff_float[0] = msg.max_eps;
+  payload_buff_float[1] = msg.position_tolerance;
+  payload_buff_float[2] = msg.speed_tolerance;
+  payload = payload_buff_float;
+}
+template<>
+inline void CAN2ROS<canard_driver::PID_tolerances>::can_to_msg(canard_driver::PID_tolerances& msg, size_t payload_size, const void* payload) {
+  msg.max_eps = ((float *)payload)[0];
+  msg.position_tolerance = ((float *)payload)[1];
+  msg.speed_tolerance = ((float *)payload)[2];
 }

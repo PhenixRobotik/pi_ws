@@ -7,7 +7,7 @@ add_compile_options(-std=c++11)
 find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs genmsg)
 
 ## Declare ROS messages and services
-add_message_files(DIRECTORY msg FILES PID.msg)
+add_message_files(DIRECTORY msg FILES PID.msg PID_tolerances.msg)
 #add_service_files(DIRECTORY srv FILES AddTwoInts.srv)
 
 ## Generate added messages and services

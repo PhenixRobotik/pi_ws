@@ -1,0 +1,3 @@
+float32 max_eps
+float32 position_tolerance
+float32 speed_tolerance

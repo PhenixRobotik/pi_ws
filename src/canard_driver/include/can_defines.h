@@ -41,6 +41,12 @@ enum MessageType {
     //PID Angular
     TSMR_PID_DELTA_GET= (CAN_ID_TSMR << 8) +  25,
     TSMR_PID_DELTA_SET= (CAN_ID_TSMR << 8) +  26,
+    //PID Linear tolerances
+    TSMR_PID_SIGMA_T_GET= (CAN_ID_TSMR << 8) +  27,
+    TSMR_PID_SIGMA_T_SET= (CAN_ID_TSMR << 8) +  28,
+    //PID Angular tolerances
+    TSMR_PID_DELTA_T_GET= (CAN_ID_TSMR << 8) +  29,
+    TSMR_PID_DELTA_T_SET= (CAN_ID_TSMR << 8) +  30,
 
     Z_TEXT_GET  = (CAN_ID_Z << 8) +   1,
     Z_TEXT_SET  = (CAN_ID_Z << 8) +   2,
