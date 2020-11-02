@@ -16,6 +16,8 @@
 
 #include <nav_msgs/Odometry.h>
 
+#include <canard_driver/PID.h>
+
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf/tf.h>
 #include <tf/transform_datatypes.h>
@@ -233,4 +235,19 @@ inline void CAN2ROS<geometry_msgs::Pose2D>::can_to_msg(geometry_msgs::Pose2D& ms
   msg.x = ((float *)payload)[0];
   msg.y = ((float *)payload)[1];
   msg.theta = ((float *)payload)[2];
+}
+
+template<>
+inline void CAN2ROS<canard_driver::PID>::msg_to_can(canard_driver::PID const& msg, size_t& payload_size, const void*& payload) {
+  payload_size = 12;
+  payload_buff_float[0] = msg.Kp;
+  payload_buff_float[1] = msg.Ki;
+  payload_buff_float[2] = msg.Kd;
+  payload = payload_buff_float;
+}
+template<>
+inline void CAN2ROS<canard_driver::PID>::can_to_msg(canard_driver::PID& msg, size_t payload_size, const void* payload) {
+  msg.Kp = ((float *)payload)[0];
+  msg.Ki = ((float *)payload)[1];
+  msg.Kd = ((float *)payload)[2];
 }

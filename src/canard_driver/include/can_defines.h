@@ -35,6 +35,12 @@ enum MessageType {
     TSMR_XYT_SET     = (CAN_ID_TSMR << 8) +   20,
     TSMR_XYT_BACK_GET= (CAN_ID_TSMR << 8) +   21,
     TSMR_XYT_BACK_SET= (CAN_ID_TSMR << 8) +   22,
+    //PID Linear
+    TSMR_PID_SIGMA_GET= (CAN_ID_TSMR << 8) +  23,
+    TSMR_PID_SIGMA_SET= (CAN_ID_TSMR << 8) +  24,
+    //PID Angular
+    TSMR_PID_DELTA_GET= (CAN_ID_TSMR << 8) +  25,
+    TSMR_PID_DELTA_SET= (CAN_ID_TSMR << 8) +  26,
 
     Z_TEXT_GET  = (CAN_ID_Z << 8) +   1,
     Z_TEXT_SET  = (CAN_ID_Z << 8) +   2,
